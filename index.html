@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎤 Assistente Calendario Vocale PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #161b3d;
+            --bg-card: #1e2547;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7c3aed;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --shadow-sm: 0 2px 8px rgba(0, 217, 255, 0.1);
+            --shadow-md: 0 8px 24px rgba(0, 217, 255, 0.15);
+            --shadow-lg: 0 16px 48px rgba(0, 217, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #1a1f3a 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 28px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.6s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-primary);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Space Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(0, 217, 255, 0.1);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+        }
+
+        .voice-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .mic-button {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            animation: pulse 2s infinite;
+        }
+
+        .mic-button:hover {
+            transform: scale(1.1);
+        }
+
+        .mic-button.listening {
+            animation: listening 1.5s infinite;
+            background: linear-gradient(135deg, var(--accent-success), var(--accent-primary));
+        }
+
+        .mic-button::before {
+            content: '🎤';
+            font-size: 4rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .voice-status {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-height: 30px;
+        }
+
+        .voice-transcript {
+            margin-top: 15px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-primary);
+            font-family: 'Space Mono', monospace;
+            min-height: 60px;
+            color: var(--accent-primary);
+        }
+
+        .appointments-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .appointments-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .appointments-list::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        .appointments-list::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        .appointment-item {
+            background: var(--bg-secondary);
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--accent-primary);
+            transition: all 0.3s ease;
+            animation: slideInRight 0.4s ease-out;
+        }
+
+        .appointment-item:hover {
+            transform: translateX(4px);
+            border-left-color: var(--accent-secondary);
+        }
+
+        .appointment-item.conflict {
+            border-left-color: var(--accent-danger);
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), var(--bg-secondary));
+        }
+
+        .appointment-time {
+            font-weight: 600;
+            color: var(--accent-primary);
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .appointment-title {
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .appointment-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .conflict-badge {
+            display: inline-block;
+            background: var(--accent-danger);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        .status-bar {
+            background: var(--bg-card);
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-danger);
+            animation: blink 2s infinite;
+        }
+
+        .status-indicator.connected {
+            background: var(--accent-success);
+            animation: none;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideInDown 0.4s ease-out;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--accent-warning);
+            color: var(--accent-warning);
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent-success);
+            color: var(--accent-success);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-danger);
+            color: var(--accent-danger);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 20px rgba(0, 217, 255, 0);
+            }
+        }
+
+        @keyframes listening {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 25px rgba(16, 185, 129, 0);
+            }
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% {
+                opacity: 1;
+            }
+            25%, 75% {
+                opacity: 0.3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+    
+    <!-- Definisco le funzioni callback PRIMA di caricare gli script -->
+    <script>
+        let gapiInited = false;
+        let gisInited = false;
+        let tokenClient = null;
+        
+        function gapiLoaded() {
+            console.log('✅ GAPI script caricato - inizio init');
+            gapi.load('client', async () => {
+                await gapi.client.init({
+                    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+                });
+                gapiInited = true;
+                console.log('✅ GAPI inizializzato');
+                if (typeof checkAllLoaded !== 'undefined') checkAllLoaded();
+            });
+        }
+        
+        function gisLoaded() {
+            console.log('✅ GIS script caricato - creo tokenClient');
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: '96856210478-d2jo3lqg1v8of4s2s5jngqncqhp9tuh0.apps.googleusercontent.com',
+                scope: 'https://www.googleapis.com/auth/calendar',
+                callback: '',
+            });
+            gisInited = true;
+            console.log('✅ GIS inizializzato, tokenClient creato');
+            if (typeof checkAllLoaded !== 'undefined') checkAllLoaded();
+        }
+    </script>
+    
+    <!-- ORA carico gli script Google - le funzioni esistono già! -->
+    <script src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Assistente Calendario</h1>
+            <p class="subtitle">Fissa i tuoi appuntamenti semplicemente parlando</p>
+        </header>
+
+        <div id="alertContainer"></div>
+
+        <div class="main-grid">
+            <!-- Configurazione Google Calendar -->
+            <div class="card">
+                <h2 class="card-title">Inizia Subito</h2>
+                
+                <div style="margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--accent-primary);">
+                    <p style="margin-bottom: 12px; color: var(--text-primary); font-size: 1.05rem; font-weight: 500;">
+                        👋 Benvenuto!
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Per iniziare, connetti il tuo Google Calendar. I tuoi dati rimangono privati e al sicuro sul tuo account Google.
+                    </p>
+                </div>
+
+                <!-- Indicatore di stato caricamento -->
+                <div id="loadingStatus" style="margin-bottom: 16px; padding: 16px; background: var(--bg-secondary); border-radius: 12px; border: 2px solid var(--border-color);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <div id="gapiStatus" style="width: 12px; height: 12px; border-radius: 50%; background: var(--accent-danger);"></div>
+                        <span id="gapiText" style="color: var(--text-secondary);">Google API: Caricamento...</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div id="gisStatus" style="width: 12px; height: 12px; border-radius: 50%; background: var(--accent-danger);"></div>
+                        <span id="gisText" style="color: var(--text-secondary);">Google Identity: Caricamento...</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="authenticateGoogle()" style="width: 100%; margin-bottom: 16px;" id="connectBtn">
+                    <span>🔐 Connetti il Mio Google Calendar</span>
+                </button>
+
+                <button class="btn btn-secondary" onclick="loadEvents()" style="width: 100%;" id="loadBtn" disabled>
+                    <span>🔄 Aggiorna Appuntamenti</span>
+                </button>
+
+                <div style="margin-top: 20px; padding: 16px; background: rgba(0, 217, 255, 0.05); border-radius: 12px; border: 1px solid rgba(0, 217, 255, 0.2);">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--accent-primary);">💡 Nota sulla privacy:</strong><br>
+                        Nessuno può accedere al tuo calendario tranne te. L'app funziona direttamente sul tuo dispositivo.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Comando Vocale -->
+            <div class="card">
+                <h2 class="card-title">Comando Vocale</h2>
+                
+                <div class="voice-container">
+                    <button class="mic-button" id="micButton" onclick="toggleVoice()"></button>
+                    <div class="voice-status" id="voiceStatus">Premi il microfono per parlare</div>
+                    <div class="voice-transcript" id="transcript">In attesa di comandi...</div>
+                    
+                    <!-- DEBUG BOX - Mostra cosa sta succedendo -->
+                    <div id="debugBox" style="margin-top: 16px; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; border-radius: 8px; display: none;">
+                        <strong style="color: #ffc107;">🔍 DEBUG:</strong>
+                        <div id="debugLog" style="margin-top: 8px; font-size: 0.9rem; font-family: 'Space Mono', monospace; color: var(--text-secondary);"></div>
+                    </div>
+                    
+                    <button onclick="toggleDebugMode()" class="btn btn-secondary" style="margin-top: 16px; font-size: 0.9rem;">
+                        <span id="debugButtonText">🔍 Mostra Dettagli Debug</span>
+                    </button>
+                    <div id="debugInfo" style="display: none; margin-top: 12px; padding: 12px; background: var(--bg-primary); border-radius: 8px; font-size: 0.85rem; font-family: 'Space Mono', monospace; color: var(--text-secondary);"></div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 16px; background: var(--bg-secondary); border-radius: 12px;">
+                    <strong style="color: var(--accent-primary);">📋 Come usare l'assistente vocale:</strong>
+                    <ul style="margin-top: 10px; color: var(--text-secondary); list-style: none; line-height: 2;">
+                        <li>🎤 <strong>Premi il microfono</strong> e parla normalmente</li>
+                        <li>📅 <strong>Crea appuntamenti:</strong> "Appuntamento domani alle 15 dal dentista"</li>
+                        <li>✅ <strong>Conferma sempre:</strong> L'app chiede "Confermi?" prima di creare</li>
+                        <li>🔍 <strong>Chiedi appuntamenti:</strong> "Quali appuntamenti ho domani?"</li>
+                        <li>❌ <strong>Cancella appuntamenti:</strong> "Cancella appuntamento domani"</li>
+                    </ul>
+                    
+                    <div style="margin-top: 16px; padding: 12px; background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--accent-success); border-radius: 8px;">
+                        <strong style="color: var(--accent-success);">💡 TRUCCHI PER MIGLIOR RICONOSCIMENTO:</strong>
+                        <ul style="margin-top: 8px; color: var(--text-secondary); list-style: none; line-height: 1.8; font-size: 0.9rem;">
+                            <li>✓ Parla <strong>CHIARAMENTE</strong> e fai piccole pause</li>
+                            <li>✓ Dì "alle QUINDICI" invece di "alle 15"</li>
+                            <li>✓ Scandisci: "Ap-pun-ta-men-to... do-ma-ni..."</li>
+                            <li>✓ Usa la modalità debug 🔍 per vedere cosa capisce</li>
+                            <li>✓ Se sbaglia, dì "No" e riprova più lentamente</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: 16px; padding: 12px; background: var(--bg-primary); border-radius: 8px;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;"><strong>Esempi per creare:</strong></p>
+                        <p style="font-size: 0.9rem; color: var(--accent-primary); font-family: 'Space Mono', monospace; margin-bottom: 12px;">
+                            "Riunione lunedì alle dieci"<br>
+                            "Appuntamento 20 gennaio ore quattordici e trenta"<br>
+                            "Pranzo con Marco dopodomani alle tredici"
+                        </p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;"><strong>Esempi per chiedere:</strong></p>
+                        <p style="font-size: 0.9rem; color: var(--accent-success); font-family: 'Space Mono', monospace; margin-bottom: 12px;">
+                            "Quali appuntamenti ho oggi?"<br>
+                            "Dimmi gli appuntamenti di domani"<br>
+                            "Ho appuntamenti lunedì?"
+                        </p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;"><strong>Esempi per cancellare:</strong></p>
+                        <p style="font-size: 0.9rem; color: var(--accent-danger); font-family: 'Space Mono', monospace;">
+                            "Cancella appuntamento domani"<br>
+                            "Elimina appuntamento oggi"<br>
+                            "Rimuovi appuntamento lunedì"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista Appuntamenti -->
+        <div class="card">
+            <h2 class="card-title">Prossimi Appuntamenti</h2>
+            <div class="appointments-list" id="appointmentsList">
+                <p style="color: var(--text-secondary); text-align: center; padding: 40px;">
+                    Nessun appuntamento caricato. Connettiti a Google Calendar per visualizzare i tuoi eventi.
+                </p>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-indicator" id="connectionStatus"></div>
+                <span id="connectionText">Non connesso</span>
+            </div>
+            <div class="status-item">
+                <span id="eventCount">0 appuntamenti</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Calendar API Configuration
+        const CLIENT_ID = '96856210478-d2jo3lqg1v8of4s2s5jngqncqhp9tuh0.apps.googleusercontent.com';
+        const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+        const SCOPES = 'https://www.googleapis.com/auth/calendar';
+
+        // tokenClient, gapiInited, gisInited sono già dichiarati nell'head
+        let accessToken = null;
+        let recognition;
+        let isListening = false;
+        let appointments = [];
+        let speechSynthesis = window.speechSynthesis;
+        let voices = [];
+        let pendingAppointment = null; // Store appointment waiting for confirmation
+        let lastCommand = ''; // Store last voice command
+        let debugMode = false; // Debug mode to show all alternatives
+
+        // Initialize Google API
+        // Le funzioni gapiLoaded e gisLoaded sono definite nell'head
+
+        function checkAllLoaded() {
+            console.log('🔍 Controllo stato: GAPI=' + gapiInited + ', GIS=' + gisInited);
+            
+            // Aggiorna indicatore GAPI
+            if (gapiInited) {
+                document.getElementById('gapiStatus').style.background = 'var(--accent-success)';
+                document.getElementById('gapiText').textContent = 'Google API: ✅ Caricata';
+                document.getElementById('gapiText').style.color = 'var(--accent-success)';
+            }
+            
+            // Aggiorna indicatore GIS
+            if (gisInited) {
+                document.getElementById('gisStatus').style.background = 'var(--accent-success)';
+                document.getElementById('gisText').textContent = 'Google Identity: ✅ Caricata';
+                document.getElementById('gisText').style.color = 'var(--accent-success)';
+            }
+            
+            if (gapiInited && gisInited) {
+                console.log('✅ Tutto caricato!');
+                document.getElementById('loadingStatus').style.borderColor = 'var(--accent-success)';
+                showAlert('✅ <strong>Tutto pronto!</strong><br><br>Ora puoi cliccare su "Connetti il Mio Google Calendar".', 'success');
+                speak('Tutto pronto! Puoi connetterti al calendario.');
+            }
+        }
+
+        // Authenticate with Google
+        function authenticateGoogle() {
+            if (!CLIENT_ID || CLIENT_ID === 'YOUR_CLIENT_ID_HERE') {
+                showAlert('⚙️ <strong>Configurazione necessaria</strong><br><br>Questa app necessita di configurazione tecnica prima dell\'uso.<br><br>Se hai ricevuto questa app, contatta chi te l\'ha fornita per completare la configurazione.', 'warning');
+                return;
+            }
+
+            // Check if Google scripts are loaded
+            if (!gisInited || !tokenClient) {
+                showAlert('⏳ <strong>Google Identity Services non ancora caricato</strong><br><br>Attendi qualche secondo e riprova.<br><br>Se il problema persiste, ricarica la pagina (Ctrl+R).', 'warning');
+                speak('Google Identity Services non ancora caricato. Attendi e riprova.');
+                console.error('GIS not loaded. gisInited:', gisInited, 'tokenClient:', tokenClient);
+                return;
+            }
+
+            if (!gapiInited) {
+                showAlert('⏳ <strong>Google API non ancora caricata</strong><br><br>Attendi qualche secondo e riprova.<br><br>Se il problema persiste, ricarica la pagina (Ctrl+R).', 'warning');
+                speak('Google API non ancora caricata. Attendi e riprova.');
+                console.error('GAPI not loaded. gapiInited:', gapiInited);
+                return;
+            }
+
+            tokenClient.callback = async (resp) => {
+                if (resp.error !== undefined) {
+                    showAlert('❌ Errore durante la connessione. Riprova.', 'danger');
+                    return;
+                }
+                accessToken = resp.access_token;
+                updateConnectionStatus(true);
+                document.getElementById('loadBtn').disabled = false;
+                
+                const successMsg = 'Perfetto! Sei connesso al tuo Google Calendar.';
+                showAlert('✅ ' + successMsg, 'success');
+                speak('Connessione riuscita! Caricamento appuntamenti in corso.');
+                
+                loadEvents();
+            };
+
+            if (!accessToken) {
+                tokenClient.requestAccessToken({prompt: 'consent'});
+            } else {
+                tokenClient.requestAccessToken({prompt: ''});
+            }
+        }
+
+        // Load events from Google Calendar
+        async function loadEvents() {
+            if (!accessToken) {
+                showAlert('🔐 Devi prima connetterti cliccando il pulsante sopra', 'warning');
+                return;
+            }
+
+            try {
+                const response = await gapi.client.calendar.events.list({
+                    'calendarId': 'primary', // Always use user's primary calendar
+                    'timeMin': (new Date()).toISOString(),
+                    'showDeleted': false,
+                    'singleEvents': true,
+                    'maxResults': 50,
+                    'orderBy': 'startTime'
+                });
+
+                appointments = response.result.items || [];
+                displayAppointments();
+                
+                let message;
+                if (appointments.length === 0) {
+                    message = 'Nessun appuntamento futuro trovato nel tuo calendario';
+                    showAlert('📅 ' + message, 'success');
+                } else {
+                    message = `Caricati ${appointments.length} appuntament${appointments.length > 1 ? 'i' : 'o'}`;
+                    showAlert('✅ ' + message, 'success');
+                }
+                speak(message);
+            } catch (error) {
+                console.error('Errore nel caricamento eventi:', error);
+                const errorMsg = 'Errore nel caricamento. Verifica di essere ancora connesso.';
+                showAlert('❌ ' + errorMsg, 'danger');
+                speak(errorMsg);
+            }
+        }
+
+        // Display appointments
+        function displayAppointments() {
+            const container = document.getElementById('appointmentsList');
+            
+            if (appointments.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 40px;">Nessun appuntamento trovato.</p>';
+                document.getElementById('eventCount').textContent = '0 appuntamenti';
+                return;
+            }
+
+            container.innerHTML = '';
+            appointments.forEach(event => {
+                const start = event.start.dateTime || event.start.date;
+                const end = event.end.dateTime || event.end.date;
+                const startDate = new Date(start);
+                const endDate = new Date(end);
+
+                const item = document.createElement('div');
+                item.className = 'appointment-item';
+                
+                const timeStr = startDate.toLocaleString('it-IT', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                item.innerHTML = `
+                    <div class="appointment-time">${timeStr}</div>
+                    <div class="appointment-title">${event.summary || 'Senza titolo'}</div>
+                    ${event.description ? `<div class="appointment-desc">${event.description}</div>` : ''}
+                `;
+
+                container.appendChild(item);
+            });
+
+            document.getElementById('eventCount').textContent = `${appointments.length} appuntamenti`;
+        }
+
+        // Create new event
+        async function createEvent(eventData) {
+            if (!accessToken) {
+                const message = 'Devi prima connetterti al tuo Google Calendar';
+                showAlert('🔐 ' + message, 'warning');
+                speak(message);
+                return;
+            }
+
+            try {
+                // Check for conflicts
+                const conflictEvent = await checkConflict(eventData.start, eventData.end);
+                
+                if (conflictEvent) {
+                    const conflictTime = new Date(conflictEvent.start.dateTime || conflictEvent.start.date);
+                    const timeStr = conflictTime.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+                    const conflictTitle = conflictEvent.summary || 'Appuntamento senza titolo';
+                    
+                    const conflictMsg = `Impossibile creare l'appuntamento. Hai già un impegno in questo orario: ${conflictTitle} alle ${timeStr}`;
+                    
+                    showAlert(`🚫 <strong>SLOT OCCUPATO!</strong><br><br>` +
+                             `Hai già un appuntamento in questo orario:<br>` +
+                             `<strong>${conflictTitle}</strong><br>` +
+                             `Orario: ${timeStr}<br><br>` +
+                             `Scegli un altro orario.`, 'danger');
+                    
+                    speak(conflictMsg);
+                    return; // BLOCCA la creazione
+                }
+
+                const response = await gapi.client.calendar.events.insert({
+                    'calendarId': 'primary',
+                    'resource': eventData
+                });
+
+                const successMsg = `Appuntamento creato: ${eventData.summary}`;
+                showAlert('✅ <strong>Appuntamento creato!</strong><br>' + eventData.summary, 'success');
+                speak(successMsg);
+                loadEvents(); // Reload events
+            } catch (error) {
+                console.error('Errore nella creazione evento:', error);
+                const errorMsg = 'Errore nella creazione dell\'appuntamento. Riprova.';
+                showAlert('❌ ' + errorMsg, 'danger');
+                speak(errorMsg);
+            }
+        }
+
+        // Check for conflicts - returns the conflicting event or null
+        async function checkConflict(startTime, endTime) {
+            const start = new Date(startTime.dateTime || startTime);
+            const end = new Date(endTime.dateTime || endTime);
+
+            for (let event of appointments) {
+                const eventStart = new Date(event.start.dateTime || event.start.date);
+                const eventEnd = new Date(event.end.dateTime || event.end.date);
+
+                // Check overlap
+                if ((start >= eventStart && start < eventEnd) || 
+                    (end > eventStart && end <= eventEnd) ||
+                    (start <= eventStart && end >= eventEnd)) {
+                    return event; // Return the conflicting event
+                }
+            }
+            return null; // No conflict
+        }
+
+        // Voice Recognition Setup
+        function initVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showAlert('Il riconoscimento vocale non è supportato in questo browser. Usa Chrome o Edge.', 'warning');
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'it-IT';
+            recognition.continuous = false;
+            recognition.interimResults = true; // Show interim results for better feedback
+            recognition.maxAlternatives = 5; // Get more alternatives for better accuracy
+
+            recognition.onstart = () => {
+                isListening = true;
+                document.getElementById('micButton').classList.add('listening');
+                document.getElementById('voiceStatus').textContent = '🎤 In ascolto...';
+                document.getElementById('transcript').textContent = 'Ti ascolto...';
+            };
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                let finalTranscript = '';
+                const transcriptDisplay = document.getElementById('transcript');
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                // Show interim results with visual feedback
+                if (interimTranscript) {
+                    const normalized = normalizeVoiceText(interimTranscript);
+                    transcriptDisplay.innerHTML = 
+                        `<div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px;">Sto sentendo...</div>` +
+                        `<div style="color: var(--accent-primary);">${interimTranscript}</div>` +
+                        (normalized !== interimTranscript.toLowerCase().trim() ? 
+                            `<div style="color: var(--accent-success); margin-top: 8px; font-size: 0.9rem;">→ ${normalized}</div>` : '');
+                }
+
+                // Process final results with alternative analysis
+                if (finalTranscript) {
+                    // Analyze all alternatives to find the best one
+                    const bestAlternative = analyzeBestAlternative(event.results[event.resultIndex]);
+                    
+                    transcriptDisplay.innerHTML = 
+                        `<div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px;">Ho sentito:</div>` +
+                        `<div style="color: var(--text-primary); margin-bottom: 8px;">"${bestAlternative.original}"</div>` +
+                        (bestAlternative.normalized !== bestAlternative.original.toLowerCase().trim() ? 
+                            `<div style="color: var(--accent-success); font-size: 0.9rem; margin-top: 8px;">✓ Corretto in: "${bestAlternative.normalized}"</div>` : '') +
+                        `<div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 8px;">Confidenza: ${Math.round(bestAlternative.confidence * 100)}%</div>`;
+                    
+                    processVoiceCommand(bestAlternative.normalized);
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Errore riconoscimento vocale:', event.error);
+                if (event.error === 'no-speech') {
+                    showAlert('🎤 Non ho sentito nulla. Riprova parlando più forte.', 'warning');
+                    speak('Non ho sentito nulla. Riprova.');
+                } else if (event.error === 'not-allowed') {
+                    showAlert('🎤 Devi autorizzare l\'uso del microfono nelle impostazioni del browser.', 'danger');
+                } else {
+                    showAlert('🎤 Errore nel riconoscimento vocale. Riprova.', 'danger');
+                    speak('Errore nel riconoscimento. Riprova.');
+                }
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                stopListening();
+            };
+
+            // Load voices for text-to-speech
+            loadVoices();
+        }
+
+        // Normalize and clean recognized text
+        function normalizeVoiceText(text) {
+            text = text.toLowerCase().trim();
+            
+            // Common misrecognitions - corrections
+            const corrections = {
+                // Days of week
+                'domani': ['domain', 'do mani', 'doman', 'do mai'],
+                'oggi': ['og gi', 'oggi'],
+                'dopodomani': ['dopo domani', 'dopo domain', 'doppo domani'],
+                'lunedì': ['lune di', 'lunedi', 'lun dì'],
+                'martedì': ['marte di', 'martedi', 'mar dì'],
+                'mercoledì': ['mercole di', 'mercoledi', 'merco dì'],
+                'giovedì': ['giove di', 'giovedi', 'gio dì'],
+                'venerdì': ['venere di', 'venerdi', 'vene dì'],
+                'sabato': ['sa bato', 'sabbato'],
+                'domenica': ['do menica', 'domen ica'],
+                
+                // Commands
+                'appuntamento': ['a punto mento', 'appunta mento', 'punto mento'],
+                'riunione': ['riu nione', 'riunion'],
+                'cancella': ['can cella', 'cancel la'],
+                'elimina': ['eli mina', 'elimin a'],
+                'conferma': ['con ferma', 'confer ma'],
+                
+                // Numbers and time
+                'quindici': ['15', 'quindi ci', 'quin dici'],
+                'sedici': ['16', 'se dici'],
+                'diciassette': ['17', 'dicias sette', 'dici assette'],
+                'diciotto': ['18', 'dici otto'],
+                'diciannove': ['19', 'dician nove', 'dici annove'],
+                'venti': ['20', 'ven ti'],
+                'trenta': ['30', 'tren ta'],
+                'quarantacinque': ['45', 'quaranta cinque'],
+                
+                // Common words
+                'dentista': ['den tista', 'denti sta'],
+                'medico': ['me dico', 'medi co'],
+                'dottore': ['dot tore', 'dotto re'],
+                'cliente': ['cli ente', 'clien te'],
+                'riunione': ['riu nione'],
+                'pranzo': ['pran zo'],
+                'cena': ['ce na'],
+                'palestra': ['pale stra'],
+            };
+            
+            // Apply corrections
+            for (const [correct, variants] of Object.entries(corrections)) {
+                variants.forEach(variant => {
+                    const regex = new RegExp(variant.replace(/\s+/g, '\\s*'), 'gi');
+                    text = text.replace(regex, correct);
+                });
+            }
+            
+            // Normalize time expressions
+            text = text.replace(/ore\s+(\d+)/gi, 'alle $1');
+            text = text.replace(/(\d+)\s*\.\s*(\d+)/g, '$1:$2'); // 15.30 -> 15:30
+            text = text.replace(/(\d+)\s+e\s+(\d+)/gi, '$1:$2'); // 15 e 30 -> 15:30
+            text = text.replace(/(\d+)\s+e\s+mezzo/gi, '$1:30'); // 15 e mezzo -> 15:30
+            
+            // Normalize "alle" variations
+            text = text.replace(/al+e\s+/gi, 'alle ');
+            
+            return text;
+        }
+
+        // Analyze multiple alternatives and choose the best one
+        function analyzeBestAlternative(result) {
+            const alternatives = [];
+            
+            // Iterate through all alternatives in the result
+            for (let i = 0; i < result.length; i++) {
+                const alternative = result[i];
+                
+                // Check if alternative exists and has transcript
+                if (!alternative || !alternative.transcript) {
+                    console.warn('⚠️ Alternative', i, 'mancante o senza transcript');
+                    continue;
+                }
+                
+                const transcript = alternative.transcript;
+                const confidence = alternative.confidence || 0.5;
+                
+                // Normalize the text
+                const normalized = normalizeVoiceText(transcript);
+                
+                // Score based on confidence and keyword matches
+                let score = confidence;
+                
+                // Bonus for containing expected keywords
+                const keywords = ['appuntamento', 'riunione', 'cancella', 'elimina', 'quali', 'domani', 'oggi', 'alle'];
+                keywords.forEach(keyword => {
+                    if (normalized.includes(keyword)) {
+                        score += 0.1;
+                    }
+                });
+                
+                alternatives.push({
+                    original: transcript,
+                    normalized: normalized,
+                    confidence: confidence,
+                    score: score,
+                    rank: i + 1
+                });
+            }
+            
+            // If no valid alternatives found, return a default one
+            if (alternatives.length === 0) {
+                console.error('❌ Nessuna alternativa valida trovata!');
+                return {
+                    original: '',
+                    normalized: '',
+                    confidence: 0,
+                    score: 0,
+                    rank: 0
+                };
+            }
+            
+            // Sort by score and return best
+            alternatives.sort((a, b) => b.score - a.score);
+            
+            console.log('✅ Migliore alternativa selezionata:', alternatives[0]);
+            
+            // Store debug info if debug mode is active
+            if (debugMode) {
+                showDebugInfo(alternatives);
+            }
+            
+            return alternatives[0];
+        }
+
+        // Toggle debug mode
+        function toggleDebugMode() {
+            debugMode = !debugMode;
+            const debugButton = document.getElementById('debugButtonText');
+            const debugInfo = document.getElementById('debugInfo');
+            
+            if (debugMode) {
+                debugButton.textContent = '✅ Debug Attivo - Nascondi';
+                debugInfo.style.display = 'block';
+                debugInfo.innerHTML = '<em>Modalità debug attiva. Parla per vedere tutte le alternative...</em>';
+                speak('Modalità debug attivata. Ora vedrai tutte le alternative di riconoscimento.');
+            } else {
+                debugButton.textContent = '🔍 Mostra Dettagli Debug';
+                debugInfo.style.display = 'none';
+                speak('Modalità debug disattivata.');
+            }
+        }
+
+        // Show debug information
+        function showDebugInfo(alternatives) {
+            const debugInfo = document.getElementById('debugInfo');
+            let html = '<strong style="color: var(--accent-primary);">📊 ALTERNATIVE RICONOSCIUTE:</strong><br><br>';
+            
+            alternatives.forEach((alt, index) => {
+                const isSelected = index === 0;
+                html += `<div style="padding: 8px; margin: 4px 0; background: ${isSelected ? 'var(--accent-primary)' : 'var(--bg-secondary)'}; 
+                         color: ${isSelected ? 'var(--bg-primary)' : 'var(--text-primary)'}; border-radius: 6px;">`;
+                html += `<strong>${isSelected ? '✓ SCELTA' : `#${alt.rank}`}:</strong><br>`;
+                html += `Originale: "${alt.original}"<br>`;
+                html += `Normalizzato: "${alt.normalized}"<br>`;
+                html += `Confidenza: ${Math.round(alt.confidence * 100)}% | Score: ${alt.score.toFixed(2)}`;
+                html += `</div>`;
+            });
+            
+            debugInfo.innerHTML = html;
+        }
+
+        // Load available voices for speech synthesis
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                speechSynthesis.onvoiceschanged = () => {
+                    voices = speechSynthesis.getVoices();
+                };
+            }
+        }
+
+        // Text-to-speech function
+        function speak(text) {
+            // Cancel any ongoing speech
+            speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'it-IT';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            // Try to find an Italian voice
+            const italianVoice = voices.find(voice => voice.lang.startsWith('it'));
+            if (italianVoice) {
+                utterance.voice = italianVoice;
+            }
+
+            // Update status to show assistant is speaking
+            const voiceStatus = document.getElementById('voiceStatus');
+            voiceStatus.textContent = '🔊 Sto parlando...';
+            voiceStatus.style.color = 'var(--accent-success)';
+
+            utterance.onend = () => {
+                voiceStatus.textContent = 'Premi il microfono per parlare';
+                voiceStatus.style.color = 'var(--text-secondary)';
+            };
+
+            speechSynthesis.speak(utterance);
+        }
+
+        function toggleVoice() {
+            if (!recognition) {
+                initVoiceRecognition();
+            }
+
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+
+        function stopListening() {
+            isListening = false;
+            document.getElementById('micButton').classList.remove('listening');
+            document.getElementById('voiceStatus').textContent = 'Premi il microfono per parlare';
+        }
+
+        // Process voice commands
+        function processVoiceCommand(command) {
+            // Mostra il debug box
+            document.getElementById('debugBox').style.display = 'block';
+            const debugLog = document.getElementById('debugLog');
+            debugLog.innerHTML = '📝 Elaborazione comando...<br>';
+            
+            command = command.toLowerCase().trim();
+            lastCommand = command;
+            
+            debugLog.innerHTML += `✅ Comando ricevuto: "${command}"<br>`;
+            
+            // Check for confirmation responses
+            if (pendingAppointment) {
+                debugLog.innerHTML += '⏳ In attesa di conferma...<br>';
+                if (command.includes('sì') || command.includes('si') || command.includes('conferma') || 
+                    command.includes('va bene') || command.includes('ok') || command.includes('esatto')) {
+                    debugLog.innerHTML += '✅ Confermato! Creo appuntamento...<br>';
+                    confirmAndCreateAppointment();
+                    return;
+                } else if (command.includes('no') || command.includes('annulla') || command.includes('sbagliato')) {
+                    debugLog.innerHTML += '❌ Annullato<br>';
+                    cancelPendingAppointment();
+                    return;
+                } else if (command.includes('ripeti') || command.includes('di nuovo')) {
+                    debugLog.innerHTML += '🔁 Ripeto...<br>';
+                    repeatConfirmation();
+                    return;
+                }
+            }
+            
+            // Check for delete commands
+            if (command.includes('cancella') || command.includes('elimina') || command.includes('rimuovi')) {
+                debugLog.innerHTML += '🗑️ Comando cancellazione rilevato<br>';
+                handleDeleteCommand(command);
+                return;
+            }
+            
+            // Check for modify commands
+            if (command.includes('modifica') || command.includes('sposta') || command.includes('cambia')) {
+                debugLog.innerHTML += '✏️ Comando modifica rilevato<br>';
+                handleModifyCommand(command);
+                return;
+            }
+            
+            // Check if it's a query about appointments
+            if (command.includes('quali') || command.includes('quanti') || command.includes('ho ') || 
+                command.includes('ci sono') || command.includes('mostra') || command.includes('dimmi')) {
+                debugLog.innerHTML += '📋 Query appuntamenti rilevata<br>';
+                handleAppointmentQuery(command);
+                return;
+            }
+
+            // Otherwise, treat as appointment creation
+            debugLog.innerHTML += '📅 Tento di creare appuntamento...<br>';
+            
+            const dateMatch = parseDateFromCommand(command);
+            debugLog.innerHTML += dateMatch ? `✅ Data riconosciuta: ${dateMatch}<br>` : '❌ Data NON riconosciuta!<br>';
+            
+            const timeMatch = parseTimeFromCommand(command);
+            debugLog.innerHTML += timeMatch ? `✅ Ora riconosciuta: ${timeMatch.hours}:${timeMatch.minutes}<br>` : '❌ Ora NON riconosciuta!<br>';
+            
+            if (!dateMatch || !timeMatch) {
+                debugLog.innerHTML += '❌ FALLITO: mancano data o ora<br>';
+                const message = 'Non ho capito quando fissare l\'appuntamento. Prova così: Appuntamento domani alle 15';
+                showAlert('❌ <strong>Non ho capito quando fissare l\'appuntamento</strong><br><br>💡 Prova così:<br>"Appuntamento domani alle 15"<br>"Riunione lunedì alle 10:30"', 'warning');
+                speak(message);
+                return;
+            }
+
+            const startDateTime = new Date(dateMatch);
+            startDateTime.setHours(timeMatch.hours, timeMatch.minutes, 0, 0);
+            
+            const endDateTime = new Date(startDateTime);
+            endDateTime.setHours(startDateTime.getHours() + 1);
+
+            // Extract title - improved extraction
+            let title = command;
+            // Remove command words
+            title = title.replace(/appuntamento|riunione|meeting|incontro/gi, '').trim();
+            // Remove time expressions
+            title = title.replace(/alle\s+\d+/gi, '').trim();
+            title = title.replace(/\d+:\d+/g, '').trim();
+            title = title.replace(/ore\s+\d+/gi, '').trim();
+            // Remove date expressions
+            title = title.replace(/domani|oggi|dopodomani/gi, '').trim();
+            title = title.replace(/lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica/gi, '').trim();
+            title = title.replace(/\d+\s*(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)/gi, '').trim();
+            // Remove prepositions
+            title = title.replace(/^(con|per|da|di|a|il|la|i|le)\s+/gi, '').trim();
+            
+            if (!title || title.length < 2) {
+                title = 'Nuovo appuntamento';
+            }
+
+            // Capitalize first letter
+            title = title.charAt(0).toUpperCase() + title.slice(1);
+
+            debugLog.innerHTML += `✅ Titolo estratto: "${title}"<br>`;
+            debugLog.innerHTML += `✅ Pronto per conferma!<br>`;
+
+            // Store as pending appointment for confirmation
+            pendingAppointment = {
+                'summary': title,
+                'start': {
+                    'dateTime': startDateTime.toISOString(),
+                    'timeZone': 'Europe/Rome'
+                },
+                'end': {
+                    'dateTime': endDateTime.toISOString(),
+                    'timeZone': 'Europe/Rome'
+                },
+                'description': 'Creato con assistente vocale'
+            };
+
+            // Ask for confirmation
+            const dateStr = startDateTime.toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long'});
+            const timeStr = startDateTime.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+            
+            const confirmMessage = `Ho capito: ${title}, ${dateStr} alle ${timeStr}. Confermi?`;
+            
+            showAlert(`📅 <strong>CONFERMA APPUNTAMENTO:</strong><br><br>` +
+                     `<strong>${title}</strong><br>` +
+                     `${dateStr}<br>` +
+                     `Ore: ${timeStr}<br><br>` +
+                     `🎤 Dì <strong>"Sì"</strong> per confermare o <strong>"No"</strong> per annullare`, 'warning');
+            
+            debugLog.innerHTML += `🗣️ Sto parlando: "${confirmMessage}"<br>`;
+            speak(confirmMessage);
+            
+            // Show transcript with what was heard
+            document.getElementById('transcript').innerHTML = 
+                `<strong>Ho sentito:</strong> "${lastCommand}"<br>` +
+                `<strong>Ho capito:</strong> ${title}<br>` +
+                `<em>Dì "Sì" o "No"</em>`;
+        }
+
+        // Confirm and create the pending appointment
+        async function confirmAndCreateAppointment() {
+            if (!pendingAppointment) return;
+            
+            speak('Perfetto, creo l\'appuntamento');
+            await createEvent(pendingAppointment);
+            pendingAppointment = null;
+        }
+
+        // Cancel the pending appointment
+        function cancelPendingAppointment() {
+            pendingAppointment = null;
+            const message = 'Appuntamento annullato';
+            showAlert('❌ ' + message, 'warning');
+            speak(message);
+            document.getElementById('transcript').textContent = 'In attesa di comandi...';
+        }
+
+        // Repeat the confirmation
+        function repeatConfirmation() {
+            if (!pendingAppointment) return;
+            
+            const startDateTime = new Date(pendingAppointment.start.dateTime);
+            const dateStr = startDateTime.toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long'});
+            const timeStr = startDateTime.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+            
+            const message = `${pendingAppointment.summary}, ${dateStr} alle ${timeStr}. Confermi?`;
+            speak(message);
+        }
+
+        // Handle delete commands
+        function handleDeleteCommand(command) {
+            if (!accessToken || appointments.length === 0) {
+                const message = 'Prima devi connetterti e caricare gli appuntamenti.';
+                showAlert('🔐 ' + message, 'warning');
+                speak(message);
+                return;
+            }
+
+            // Try to extract date
+            const dateMatch = parseDateFromCommand(command);
+            const targetDate = dateMatch || new Date();
+
+            // Filter appointments for target date
+            const dateAppts = appointments.filter(event => {
+                const eventDate = new Date(event.start.dateTime || event.start.date);
+                return eventDate.toDateString() === targetDate.toDateString();
+            });
+
+            if (dateAppts.length === 0) {
+                const dateStr = targetDate.toLocaleDateString('it-IT', {day: 'numeric', month: 'long'});
+                const message = `Non hai appuntamenti per ${dateStr}`;
+                showAlert('📅 ' + message, 'warning');
+                speak(message);
+                return;
+            }
+
+            // If only one appointment, delete it
+            if (dateAppts.length === 1) {
+                const event = dateAppts[0];
+                confirmDeleteAppointment(event);
+            } else {
+                // Multiple appointments - list them
+                listAppointmentsForDeletion(dateAppts, targetDate);
+            }
+        }
+
+        // Confirm deletion of a specific appointment
+        function confirmDeleteAppointment(event) {
+            const eventTime = new Date(event.start.dateTime || event.start.date);
+            const timeStr = eventTime.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+            const dateStr = eventTime.toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long'});
+            const title = event.summary || 'Senza titolo';
+            
+            const confirmMsg = `Vuoi cancellare ${title}, ${dateStr} alle ${timeStr}?`;
+            speak(confirmMsg);
+            
+            const confirm = window.confirm(`Confermi cancellazione?\n\n${title}\n${dateStr}\n${timeStr}`);
+            
+            if (confirm) {
+                deleteAppointment(event.id);
+            } else {
+                speak('Cancellazione annullata');
+            }
+        }
+
+        // Delete appointment by ID
+        async function deleteAppointment(eventId) {
+            try {
+                await gapi.client.calendar.events.delete({
+                    'calendarId': 'primary',
+                    'eventId': eventId
+                });
+                
+                const message = 'Appuntamento cancellato';
+                showAlert('✅ ' + message, 'success');
+                speak(message);
+                loadEvents();
+            } catch (error) {
+                console.error('Errore cancellazione:', error);
+                const errorMsg = 'Errore nella cancellazione. Riprova.';
+                showAlert('❌ ' + errorMsg, 'danger');
+                speak(errorMsg);
+            }
+        }
+
+        // List appointments for deletion when multiple exist
+        function listAppointmentsForDeletion(events, targetDate) {
+            const dateStr = targetDate.toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long'});
+            let message = `Hai ${events.length} appuntamenti per ${dateStr}. Quale vuoi cancellare? `;
+            
+            let alertHtml = `<strong>Appuntamenti per ${dateStr}:</strong><br><br>`;
+            
+            events.forEach((event, index) => {
+                const eventTime = new Date(event.start.dateTime || event.start.date);
+                const timeStr = eventTime.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+                const title = event.summary || 'Senza titolo';
+                
+                message += `${index + 1}: ${title} alle ${timeStr}. `;
+                alertHtml += `<button onclick="confirmDeleteAppointment(appointments[${appointments.indexOf(event)}])" 
+                    style="width: 100%; margin: 8px 0; padding: 12px; background: var(--accent-danger); color: white; 
+                    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">
+                    ❌ ${title} - ${timeStr}
+                </button><br>`;
+            });
+            
+            showAlert(alertHtml + '<br><em>Clicca per cancellare</em>', 'warning');
+            speak(message);
+        }
+
+        // Handle modify commands
+        function handleModifyCommand(command) {
+            const message = 'Per modificare un appuntamento, prima cancellalo dicendo "Cancella appuntamento", poi creane uno nuovo con i dati corretti.';
+            showAlert('💡 <strong>Come modificare:</strong><br><br>' +
+                     '1️⃣ Dì: "Cancella appuntamento [quando]"<br>' +
+                     '2️⃣ Poi crea il nuovo appuntamento con i dati corretti<br><br>' +
+                     'Esempio:<br>' +
+                     '🎤 "Cancella appuntamento domani"<br>' +
+                     '🎤 "Appuntamento domani alle 16 riunione"', 'warning');
+            speak(message);
+        }
+
+        // Handle queries about appointments
+        function handleAppointmentQuery(command) {
+            if (!accessToken || appointments.length === 0) {
+                const message = 'Prima devi connetterti e caricare gli appuntamenti.';
+                showAlert('🔐 Devi prima connetterti e caricare gli appuntamenti', 'warning');
+                speak(message);
+                return;
+            }
+
+            const dateMatch = parseDateFromCommand(command);
+            const targetDate = dateMatch || new Date();
+            
+            // Filter appointments for the target date
+            const filteredAppts = appointments.filter(event => {
+                const eventDate = new Date(event.start.dateTime || event.start.date);
+                return eventDate.toDateString() === targetDate.toDateString();
+            });
+
+            if (filteredAppts.length === 0) {
+                const dateStr = targetDate.toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long'});
+                const message = `Non hai appuntamenti per ${dateStr}`;
+                showAlert(`📅 ${message}`, 'success');
+                speak(message);
+                return;
+            }
+
+            // Build response
+            const dateStr = targetDate.toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long'});
+            let message = `Hai ${filteredAppts.length} appuntament${filteredAppts.length > 1 ? 'i' : 'o'} per ${dateStr}: `;
+            
+            filteredAppts.forEach((event, index) => {
+                const eventTime = new Date(event.start.dateTime || event.start.date);
+                const timeStr = eventTime.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+                const title = event.summary || 'Senza titolo';
+                
+                if (index > 0) message += ', ';
+                message += `${title} alle ${timeStr}`;
+            });
+
+            showAlert(`📅 <strong>${message}</strong>`, 'success');
+            speak(message);
+        }
+
+        function parseDateFromCommand(command) {
+            // Normalize the command first
+            command = normalizeVoiceText(command);
+            
+            const oggi = new Date();
+            
+            // Check for relative days
+            const relativeDays = {
+                'oggi': 0,
+                'domani': 1,
+                'dopodomani': 2,
+                'dopo domani': 2
+            };
+            
+            for (const [day, offset] of Object.entries(relativeDays)) {
+                if (command.includes(day)) {
+                    const targetDate = new Date(oggi);
+                    targetDate.setDate(oggi.getDate() + offset);
+                    return targetDate;
+                }
+            }
+
+            // Check for day of week
+            const giorni = {
+                'domenica': 0, 'lunedì': 1, 'lunedi': 1,
+                'martedì': 2, 'martedi': 2,
+                'mercoledì': 3, 'mercoledi': 3,
+                'giovedì': 4, 'giovedi': 4,
+                'venerdì': 5, 'venerdi': 5,
+                'sabato': 6
+            };
+            
+            for (const [giorno, targetDay] of Object.entries(giorni)) {
+                if (command.includes(giorno)) {
+                    const currentDay = oggi.getDay();
+                    let daysToAdd = targetDay - currentDay;
+                    if (daysToAdd <= 0) daysToAdd += 7;
+                    
+                    const futureDate = new Date(oggi);
+                    futureDate.setDate(oggi.getDate() + daysToAdd);
+                    return futureDate;
+                }
+            }
+
+            // Check for specific date (e.g., "15 dicembre", "il 20 gennaio")
+            const mesi = {
+                'gennaio': 0, 'febbraio': 1, 'marzo': 2, 'aprile': 3,
+                'maggio': 4, 'giugno': 5, 'luglio': 6, 'agosto': 7,
+                'settembre': 8, 'ottobre': 9, 'novembre': 10, 'dicembre': 11
+            };
+
+            for (const [mese, monthIndex] of Object.entries(mesi)) {
+                if (command.includes(mese)) {
+                    // Try to find day number before month name
+                    const regex = new RegExp('(\\d+)\\s*' + mese, 'i');
+                    const match = command.match(regex);
+                    if (match) {
+                        const giorno = parseInt(match[1]);
+                        if (giorno >= 1 && giorno <= 31) {
+                            const data = new Date(oggi.getFullYear(), monthIndex, giorno);
+                            if (data < oggi) {
+                                data.setFullYear(oggi.getFullYear() + 1);
+                            }
+                            return data;
+                        }
+                    }
+                }
+            }
+
+            // Default to today if no date found
+            return oggi;
+        }
+
+        function parseTimeFromCommand(command) {
+            // Convert spoken numbers to digits first
+            const numberWords = {
+                'zero': 0, 'una': 1, 'uno': 1, 'due': 2, 'tre': 3, 'quattro': 4, 'cinque': 5,
+                'sei': 6, 'sette': 7, 'otto': 8, 'nove': 9, 'dieci': 10,
+                'undici': 11, 'dodici': 12, 'tredici': 13, 'quattordici': 14, 'quindici': 15,
+                'sedici': 16, 'diciassette': 17, 'diciotto': 18, 'diciannove': 19, 'venti': 20,
+                'ventuno': 21, 'ventidue': 22, 'ventitre': 23, 'ventiquattro': 24,
+                'trenta': 30, 'quaranta': 40, 'cinquanta': 50
+            };
+            
+            let processedCommand = command;
+            
+            // Replace number words with digits
+            for (const [word, num] of Object.entries(numberWords)) {
+                const regex = new RegExp('\\b' + word + '\\b', 'gi');
+                processedCommand = processedCommand.replace(regex, num.toString());
+            }
+            
+            // Handle "e mezzo" = :30
+            processedCommand = processedCommand.replace(/(\d+)\s+e\s+mezzo/gi, '$1:30');
+            // Handle "e un quarto" = :15
+            processedCommand = processedCommand.replace(/(\d+)\s+e\s+un\s+quarto/gi, '$1:15');
+            // Handle "e tre quarti" = :45
+            processedCommand = processedCommand.replace(/(\d+)\s+e\s+tre\s+quarti/gi, '$1:45');
+            
+            // Match time patterns
+            const timePatterns = [
+                /(\d{1,2})[:\.](\d{2})/,          // 15:00 or 15.00
+                /alle\s+(\d{1,2})[:\.](\d{2})/,   // alle 15:00
+                /ore\s+(\d{1,2})[:\.](\d{2})/,    // ore 15:00
+                /(\d{1,2})\s+e\s+(\d{2})/,        // 15 e 30
+                /alle\s+(\d{1,2})(?!\d)/,          // alle 15 (no minutes)
+                /ore\s+(\d{1,2})(?!\d)/,           // ore 15 (no minutes)
+                /(\d{1,2})(?=\s|$)(?![\d:])/       // just "15" followed by space or end
+            ];
+
+            for (let pattern of timePatterns) {
+                const match = processedCommand.match(pattern);
+                if (match) {
+                    const hours = parseInt(match[1]);
+                    const minutes = match[2] ? parseInt(match[2]) : 0;
+                    
+                    if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
+                        return { hours, minutes };
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        // Utility functions
+        function showAlert(message, type = 'warning') {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} show`;
+            alert.innerHTML = message;
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+
+        function updateConnectionStatus(connected) {
+            const indicator = document.getElementById('connectionStatus');
+            const text = document.getElementById('connectionText');
+            
+            if (connected) {
+                indicator.classList.add('connected');
+                text.textContent = 'Connesso a Google Calendar';
+            } else {
+                indicator.classList.remove('connected');
+                text.textContent = 'Non connesso';
+            }
+        }
+
+        // Initialize on page load
+        window.onload = () => {
+            console.log('🚀 App avviata');
+            initVoiceRecognition();
+            showAlert('⏳ Caricamento Google API in corso... Attendi 5-10 secondi.', 'info');
+            
+            // Controllo periodico ogni 2 secondi
+            let checkCount = 0;
+            const checkInterval = setInterval(() => {
+                checkCount++;
+                console.log(`🔍 Controllo #${checkCount}: GAPI=${gapiInited}, GIS=${gisInited}`);
+                
+                checkAllLoaded(); // Aggiorna indicatori visivi
+                
+                if (gapiInited && gisInited) {
+                    console.log('✅ Entrambi caricati, fermo i controlli');
+                    clearInterval(checkInterval);
+                } else if (checkCount >= 15) {
+                    // Dopo 30 secondi (15 controlli x 2 sec)
+                    clearInterval(checkInterval);
+                    console.error('⏱️ TIMEOUT dopo 30 secondi');
+                    showAlert('⏱️ <strong>Caricamento lento</strong><br><br>' +
+                             'Gli script Google stanno impiegando troppo tempo.<br>' +
+                             'Prova a ricaricare la pagina (F5).<br><br>' +
+                             'GAPI: ' + (gapiInited ? '✅' : '❌') + '<br>' +
+                             'GIS: ' + (gisInited ? '✅' : '❌'), 'warning');
+                }
+            }, 2000);
+        };
+    </script>
+</body>
+</html>
